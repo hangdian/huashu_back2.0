@@ -1,0 +1,65 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huashu.monitor.dao.EngineRoomDao">
+    <resultMap id="EngineRoom" type="com.huashu.monitor.pojo.EngineRoom">
+        <id column="engine_room_id" property="engineRoomId"/>
+        <result column="region_id" property="regionId"/>
+        <result column="engine_room_address" property="engineRoomAddress"/>
+        <result column="long" property="longitude" />
+        <result column="lati" property="lati"/>
+        <result column="pic" property="pic"/>
+        <result column="Arrears" property="arrears"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    <insert id="insertRoomInfo" parameterType="com.huashu.monitor.pojo.EngineRoom">
+        insert into engine_room (regionId,engineRoomAddress,longitude,lati,pic,arrears,createTime,updateTime)
+        values
+        (#{regionId},#{engineRoomAddress},#{longitude},#{lati},#{pic},#{arrears},#{createTime},#{updateTime})
+
+    </insert>
+    <update id="updateRoomList" parameterType="com.huashu.monitor.pojo.EngineRoom">
+        update  engine_room
+        <set>
+            <if test="regionId != null and regionId != ''">
+                regionId=#{regionId},
+            </if>
+            <if test=" engineRoomAddress != null and  engineRoomAddress != ''">
+                engineRoomAddress=#{engineRoomAddress},
+            </if>
+            <if test="longitude != null and longitude != ''">
+                longitude=#{longitude},
+            </if>
+            <if test="lati != null and lati !=''">
+                lati=#{lati},
+            </if>
+            <if test="pic != null and pic!= ''  ">
+                pic=#{pic},
+            </if>
+            <if test="arrears != null and arrears != ''">
+                arrears=#{arrears},
+            </if>
+            <if test="createTime != null and createTime !=''">
+                createTime=#{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                updateTime=#{updateTime}
+            </if>
+        </set>
+        where engineRoomId=#{engineRoomId}
+    </update>
+    <select id="getRoomInfo" resultMap="EngineRoom">
+        select * from engine_room where engineRoomId=#{engineRoomId}
+    </select>
+    <select id="getRoomList" resultMap="EngineRoom">
+        select  * from engine_room where regionId=#{regionId}
+    </select>
+    <select id="getTreeRoomList" resultMap="">
+        select er.engine_room_id erid r.region_id rid d.dev_type_id dtid
+        from engine_room er
+        left join region r
+        on er.region_id=r.region_id
+        right join dev d
+        on d.computer_room_id=er.engine_room_id
+
+    </select>
+</mapper>

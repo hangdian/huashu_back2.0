@@ -1,0 +1,39 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huashu.monitor.dao.UserDao">
+    <insert id="save" parameterType="com.huashu.monitor.pojo.User" useGeneratedKeys="true" keyProperty="id">
+        insert into t_user
+        values (#{id}, #{username}, #{password}, #{salt})
+    </insert>
+    <select id="findByUserName" parameterType="String" resultType="com.huashu.monitor.pojo.User">
+        select id, username, password, salt
+        from t_user
+        where username = #{username}
+    </select>
+
+    <resultMap id="userMap" type="com.huashu.monitor.pojo.User">
+        <id column="uid" property="id"/>
+        <result column="username" property="username"/>
+        <collection property="roles" javaType="list" ofType="com.huashu.monitor.pojo.Role">
+            <id column="id" property="id"/>
+            <result column="rname" property="name"/>
+        </collection>
+    </resultMap>
+
+    <select id="findRolesByUserName" parameterType="String" resultMap="userMap">
+        select u.id uid,u.username,r.id,r.name rname
+        from t_user u
+        left join t_user_role ur
+        on u.id=ur.userid
+        left join t_role r
+        on ur.roleid=r.id
+        where u.username=#{username}
+    </select>
+
+    <select id="findPermsByRoleId" parameterType="String" resultType="com.huashu.monitor.pojo.Perms">
+        select p.id,p.NAME,p.url,r.NAME
+        from t_role r
+        left join t_role_perms rp on r.id=rp.roleid
+        left join t_perms p on rp.permsid=p.id
+        where r.id=#{id}
+    </select>
+</mapper>

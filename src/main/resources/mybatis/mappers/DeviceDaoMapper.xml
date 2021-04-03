@@ -1,0 +1,78 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huashu.monitor.dao.DeviceDao">
+    <resultMap id="Device" type="com.huashu.monitor.pojo.Device">
+        <id column="dev_id" property="devId"/>
+        <result column="dev_type_id" property="devTypeId"/>
+        <result column="userID" property="userId"/>
+        <result column="devEUI" property="devEui"/>
+        <result column="OIDIndex" property="oidiIndex"/>
+        <result column="computer_room_id" property="computerRoomId"/>
+        <result column="tmnAddr" property="tmnAddr"/>
+        <result column="long" property="longitude"/>
+        <result column="lati" property="lati"/>
+        <result column="coordType" property="coordType"/>
+        <result column="position" property="position"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    <select id="getFacilityInfo" resultMap="Device">
+        select * from device where devtypeid=#{devTypeId}
+    </select>
+    <update id="updateFacility" parameterType="com.huashu.monitor.pojo.Device">
+        update device
+        <set>
+        <if test="devTypeId != null and devTypeId != ''">
+            devTypeId=#{devTypeId},
+        </if>
+        <if test=" userId != null and  userId != ''">
+            userId=#{devTypeId},
+        </if>
+        <if test="devEui != null and devEui != '' ">
+            devEui=#{devEui},
+        </if>
+        <if test="oidiIndex != null and oidiIndex != '' ">
+            oidiIndex=#{oidiIndex},
+        </if>
+        <if test="computerRoomId != null and computerRoomId != ''">
+            computerRoomId=#{computerRoomId},
+        </if>
+        <if test="tmnAddr != null and tmnAddr !='' ">
+            tmnAddr=#{tmnAddr},
+        </if>
+        <if test="longitude != null and longitude != ''">
+            longitude=#{longitude},
+        </if>
+        <if test="lati != null and lati !=''">
+            lati=#{lati},
+        </if>
+        <if test="coordType != null and coordType!= ''  ">
+            coordType=#{coordType},
+        </if>
+        <if test="position != null and position != ''">
+            position=#{position},
+        </if>
+        <if test="createTime != null and createTime !=''">
+            createTime=#{createTime},
+        </if>
+        <if test="updateTime != null and updateTime != ''">
+            updateTime=#{updateTime}
+        </if>
+        </set>
+        where devId=#{devId}
+    </update>
+    <insert id="insertFacility" parameterType="com.huashu.monitor.pojo.Device">
+       insert into device(devTypeId,userId,devEui,oidiIndex,computerRoomId,tmnAddr,longitude,lati,coordType,position,createTime,updateTime)
+       values
+       (#{devTypeId},#{devTypeId},#{devEui},#{oidiIndex},#{computerRoomId},#{tmnAddr},#{longitude},#{lati},#{coordType},#{position},#{createTime},#{updateTime})
+    </insert>
+    <insert id="batchInsertFacility" >
+        insert into device(devTypeId,userId,devEui,oidiIndex,computerRoomId,tmnAddr,longitude,lati,coordType,position,createTime,updateTime)
+        values
+        <foreach collection="devices" item="device" separator=",">
+            (#{device.devTypeId},#{device.devTypeId},#{device.devEui},#{device.oidiIndex},#{device.computerRoomId},#{device.tmnAddr},#{device.longitude},#{device.lati},#{device.coordType},#{device.position},#{device.createTime},#{device.updateTime})
+        </foreach>
+    </insert>
+    <select id="getFacilityList" resultType="com.huashu.monitor.dto.DeviceDto">
+        select * from device where devTypeId=#{devTypeId}
+    </select>
+</mapper>
