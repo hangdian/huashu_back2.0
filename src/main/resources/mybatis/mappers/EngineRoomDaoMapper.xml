@@ -53,13 +53,22 @@
     <select id="getRoomList" resultMap="EngineRoom">
         select  * from engine_room where regionId=#{regionId}
     </select>
-    <select id="getTreeRoomList" resultMap="">
-        select er.engine_room_id erid r.region_id rid d.dev_type_id dtid
-        from engine_room er
-        left join region r
-        on er.region_id=r.region_id
-        right join dev d
-        on d.computer_room_id=er.engine_room_id
+    <resultMap id="roomTree" type="com.huashu.monitor.pojo.EngineRoomTree">
+        <result column="parent_id" property="parentId"/>
+        <result column="region_id" property="regionId"/>
+        <result column="engine_room_id" property="engineRoomId"/>
+        <result column="dev_id" property="devId"/>
+        <result column="dev_type_name" property="devTypeName"/>
+    </resultMap>
 
+    <select id="getTreeRoomList" resultMap="roomTree">
+        SELECT region.parent_id ,engine_room.region_id,engine_room.engine_room_id,dev.dev_id,dev_type.dev_type_name
+        FROM region
+                 JOIN engine_room
+                      ON region.region_id=engine_room.region_id
+                 JOIN dev
+                      ON engion_room.engine_room_id=dev.computer_room_id
+                 JOIN dev_type
+                      ON dev.dev_type_id=dev_type.dev_type_id
     </select>
 </mapper>

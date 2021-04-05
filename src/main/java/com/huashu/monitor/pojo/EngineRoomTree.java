@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EngineRoomTree {
+    private int parentId;
     private int engineRoomId;
     private String regionId;//机房所在ID
-    private int devTypeId;//类型ID
+    private int devId;//类型ID
+    private String devTypeName;
 }

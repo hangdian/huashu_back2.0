@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class Device {
     private int devId;
     private int devTypeId;//类型
